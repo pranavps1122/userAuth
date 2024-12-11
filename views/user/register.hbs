@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+   
+    <link rel="stylesheet" href="/styles/Userlogin.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="title">REGISTER</h1>
+        <form class="form" method="post" action="/user/register">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" >
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" >
+            </div>
+            <div class="input-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input id="confirmPassword" type="password" name="confirmPassword" >
+            </div>
+            <p class="sign-up">Already Have An Account?
+                <a href="/user/login">Login</a>
+            </p>
+            <button type="submit" class="sign-in">Sign Up</button>
+        </form>
+    </div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        
+        const message = "{{message}}"; 
+        if (message) {
+            swal({
+                title: "Message",
+                text: message,
+                icon: "info",
+                button: "OK"
+            });
+        }
+
+  document.querySelector('form').addEventListener('submit', function (e) {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+   
+    if (email === '' || password === '' || confirmPassword === '') {
+        swal("All fields are required!", "", "warning");
+        e.preventDefault(); 
+        return;
+    }
+
+   
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(email)) {
+        swal("Please enter a valid email address!", "", "error");
+        e.preventDefault(); 
+        return;
+    }
+
+
+    if (password !== confirmPassword) {
+        swal("Passwords do not match!", "", "error");
+        e.preventDefault(); 
+        return;
+    }
+});
+
+    </script>
+</body>
+</html>

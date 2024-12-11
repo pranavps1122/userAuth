@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="/styles/adminDasboard.css">
+
+<!-- Add User Button -->
+<div style="text-align: right; margin-bottom: 20px;">
+  <a href="/admin/addUser" class="btn addUser">Add User</a>
+   <a href="/admin/logout" class="btn-logout">Logout</a>
+  
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>SL.No</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each users}}
+    <tr>
+      <td>{{add @index 1}}</td> <!-- Using the add helper -->
+      <td>{{this.email}}</td>
+      <td>
+        <a href="/admin/editUser/{{this._id}}" class="btn edit">Edit</a>
+        <a href="/admin/deleteUser/{{this._id}}" class="btn delete" onclick="return showDeleteAlert(event, '{{this._id}}')">Delete</a>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function showDeleteAlert(event, userId) {
+        // Prevent the default action (form submission or link navigation)
+        event.preventDefault();
+
+        // Show SweetAlert
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, proceed with the deletion by redirecting
+                window.location.href = '/admin/deleteUser/' + userId;
+            }
+        });
+
+        return false; // Prevent the default action until after SweetAlert confirmation
+    }
+</script>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - User Home</title>
+    <link rel="stylesheet" href="/styles/Userlogin.css"> <!-- Link your CSS file for styling -->
+</head>
+<body>
+    <div class="welcome-container">
+        <h1>Welcome, {{username}}!</h1> <!-- Dynamic user name rendering -->
+        <p>You are logged in successfully.</p>
+        <div class="action-buttons">
+           
+            <a href="/user/logout" class="button logout">Log Out</a>
+        </div>
+    </div>
+
+    <script>
+        const message = "{{message}}"; // If there is any message passed from the backend
+        if (message) {
+            swal({
+                title: "Message",
+                text: message,
+                icon: "info",
+                button: "OK"
+            });
+        }
+    </script>
+</body>
+</html>

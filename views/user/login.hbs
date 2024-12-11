@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="/styles/Userlogin.css">
+<div class="form-container">
+    <h1 class="title">LOGIN</h1>
+    <form class="form" method="post" action="/user/login">
+        <div class="input-group">
+            <label for="email" class="username">Email</label>
+            <input id="email" type="email" name="email" > 
+        </div>
+        <div class="input-group">
+            <label for="password" class="password">Password</label>
+            <input id="password" type="password" name="password" >
+        </div>
+        <div class="forgot">
+            <a href="#">Forgot password ?</a>
+        </div>
+        <button class="sign-in">Log in</button>
+       
+        <p class="sign-up">Don't you have an account?
+            <a href="/user/register">Sign up</a>
+        </p>
+    </form>
+</div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    
+   
+    const message = "{{message}}";  
+    if (message) {
+        swal({
+            title: "Message",
+            text: message,
+            icon: "info",
+            button: "OK"
+        });
+    }
+
+   
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+       
+        if (email === '' || password === '') {
+            swal("All fields are required!", "", "warning");
+            e.preventDefault();  
+            return;
+        }
+
+        
+    });
+</script>

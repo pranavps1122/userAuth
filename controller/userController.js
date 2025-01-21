@@ -2,23 +2,24 @@ const userSchema = require('../model/userModel');
 const bcrypt = require('bcrypt');
 const saltround = 10;
 
-// Render Register Page
+
+
 const loadRegister = (req, res) => {
     res.render('user/register');
 };
 
-// Render Login Page
+
 const loadLogin = (req, res) => {
     res.render('user/login');
 };
 
-// Register User
+
 const registerUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password ,name} = req.body;
 
-        // Check if email or password is missing
-        if (!email || !password) {
+    
+        if (!email || !password||!name ) {
             return res.render('user/register', { message: 'Email and Password are required!' });
         }
 
@@ -32,11 +33,20 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltround);
 
        
-        const newUser = new userSchema({ email, password: hashedPassword });
+        const newUser = new userSchema({ email, password: hashedPassword ,name});
         await newUser.save();
 
-       
-        return res.render('user/login', { message: 'User registered successfully! Please log in.' });
+        console.log(
+            `username : ${name} 
+            email: ${email} 
+            password:${hashedPassword}`);
+           
+         
+        
+  
+    return res.render('user/login',{ok:'User Created Sucessfully'})
+  
+
 
     } catch (error) {
         console.error('Error:', error.message);
@@ -49,15 +59,20 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await userSchema.findOne({ email });
+        if(email===""||password===''){
+            return res.render('user/login', { message: 'Please Enter All fileds' });
+
+        }
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.render('user/login', { message: 'Invalid credentials' });
         }
-
        
-        req.session.user=true;
+        req.session.user={email:user.email , name:user.name}
         
         res.redirect('/home');
+      
+
     } catch (error) {
         console.error('Login error:', error.message);
         res.render('user/login', { message: 'Something went wrong! Please try again later.' });
@@ -65,10 +80,15 @@ const login = async (req, res) => {
 };
 
 const loadHome = (req, res) => {
+   
+    
     if (!req.session.user) {
         return res.redirect('/user/login'); 
     }
-    res.render('user/userHome');
+    console.log('user',req.session.user);
+    
+    res.render('user/userHome', { detials: req.session.user.email});
+
 };
 
 const logout = (req, res) => {
@@ -85,11 +105,14 @@ const logout = (req, res) => {
     }
 };
 
+
+
 module.exports = { 
     registerUser,
     loadRegister,
     loadLogin,
     login,
     loadHome,
-    logout
+    logout,
+    
 };

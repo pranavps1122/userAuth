@@ -181,3 +181,26 @@ p {
 .logout:hover {
     background-color: #d32f2f;
 }
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+.user {
+    font-family: 'Roboto', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #2E3A59;
+    margin-top: 30px;
+    padding: 15px 20px;
+ 
+    border-radius: 12px;
+    text-align: center;
+    width: fit-content;
+    margin: 30px auto;
+    
+    transition: all 0.3s ease;
+}
+.user:hover{
+  color: #2fbad3;
+
+
+  
+}

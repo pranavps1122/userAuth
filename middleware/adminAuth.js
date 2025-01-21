@@ -8,7 +8,7 @@ const checkSession = (req, res, next) => {
 
 const isLogin = (req, res, next) => {
     if (req.session.admin) {
-        return res.redirect('/admin/dashboard');  
+        res.redirect('/admin/dashboard');  
     }else{
         next();  
     }

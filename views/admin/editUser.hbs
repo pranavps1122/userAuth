@@ -4,7 +4,10 @@
 
 <form id="editUserForm">
     <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="{{user.email}}" required />
+    <input type="email" id="email" name="email" value="{{user.email}}" />
+
+        <label for="email">Username:</label>
+    <input type="email" id="name" name="name" value="{{user.name}}" />
     
     <button type="button" class="btn" onclick="submitEditForm();">Update</button>
 </form>
@@ -15,13 +18,16 @@
 <script>
   async function submitEditForm() {
     const email = document.getElementById('email').value;
-    const formAction = "/admin/editUser/{{user._id}}"; // Backend route
+    const name=document.getElementById('name').value
+    const formAction = "/admin/editUser/{{user._id}}"; 
 
+    
+   
     try {
       const response = await fetch(formAction, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email })
+        body: JSON.stringify({ email: email , name:name })
       });
 
       const result = await response.json();

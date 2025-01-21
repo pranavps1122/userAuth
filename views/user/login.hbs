@@ -22,30 +22,24 @@
 </div>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-    
-   
-    const message = "{{message}}";  
-    if (message) {
+    const errorMessage = "{{message}}";  
+    if (errorMessage) {
         swal({
-            title: "Message",
-            text: message,
-            icon: "info",
+            title: "Error",
+            text: errorMessage,
+            icon: "error",
             button: "OK"
         });
     }
 
-   
-    document.querySelector('form').addEventListener('submit', function (e) {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-       
-        if (email === '' || password === '') {
-            swal("All fields are required!", "", "warning");
-            e.preventDefault();  
-            return;
-        }
-
-        
-    });
+    const successMessage = "{{ok}}";  
+    if (successMessage) {
+        swal({
+            title: "Success",
+            text: successMessage,
+            icon: "success",
+            button: "OK"
+        });
+    }
 </script>
+

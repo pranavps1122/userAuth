@@ -314,12 +314,12 @@ button.btn:focus {
 }
 
 .add-user-btn:hover {
-  background-color: #218838; /* Darker green */
+  background-color: #218838; 
 }
 
 .btn-logout{
   width: 100%;
-  background-color: #ff0000; /* Green */
+  background-color: #ff0000;
   color: white;
   padding: 8px;
   border: none;
@@ -334,7 +334,6 @@ a{
   text-decoration: none;
 }
 
-/* New Add User Container */
 .new-add-user-container {
   width: 100%;
   max-width: 450px;
@@ -348,7 +347,6 @@ a{
   animation: fadeInUp 0.5s ease-out forwards;
 }
 
-/* Fade In Animation */
 @keyframes fadeInUp {
   from {
       opacity: 0;
@@ -369,7 +367,7 @@ a{
   letter-spacing: 0.5px;
 }
 
-/* New Form Labels */
+
 .new-label {
   display: block;
   font-size: 16px;
@@ -378,7 +376,6 @@ a{
   margin-bottom: 8px;
 }
 
-/* New Input Fields */
 .new-input {
   width: 100%;
   padding: 12px;
@@ -391,14 +388,12 @@ a{
   transition: all 0.3s ease;
 }
 
-/* Input Focus Styling */
 .new-input:focus {
   border-color: #4CAF50;
   outline: none;
   box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
 }
 
-/* New Button Styling */
 .new-btn {
   width: 100%;
   padding: 14px;
@@ -417,12 +412,10 @@ a{
   transform: translateY(-3px);
 }
 
-/* Button Click Animation */
 .new-btn:active {
   transform: translateY(1px);
 }
 
-/* Responsive Design for Mobile */
 @media (max-width: 480px) {
   .new-add-user-container {
       padding: 20px;
@@ -439,4 +432,30 @@ a{
   .new-btn {
       font-size: 16px;
   }
+}
+
+#searchInput {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 150px;
+  margin-right: 20px;
+  transition: all 0.3s ease;
+ 
+}
+
+
+#searchInput:focus {
+  outline: none;
+  border-color: #5cb85c; 
+  box-shadow: 0 0 5px rgba(0, 128, 0, 0.5); 
+}
+
+
+#searchInputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 20px;
 }

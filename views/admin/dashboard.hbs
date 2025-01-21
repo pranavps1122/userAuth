@@ -1,16 +1,18 @@
 <link rel="stylesheet" href="/styles/adminDasboard.css">
 
-<!-- Add User Button -->
+
+
 <div style="text-align: right; margin-bottom: 20px;">
-  <a href="/admin/addUser" class="btn addUser">Add User</a>
-   <a href="/admin/logout" class="btn-logout">Logout</a>
-  
+    <input type="text" id="searchInput" placeholder="Search users" onkeyup="searchUsers()" class="search-input">
+    <a href="/admin/addUser" class="btn addUser">Add User</a>
+    <a href="/admin/logout" class="btn-logout">Logout</a>
 </div>
 
-<table>
+<table class="user-table" id="usersTable">
   <thead>
     <tr>
       <th>SL.No</th>
+      <th>Username</th>
       <th>Email</th>
       <th>Actions</th>
     </tr>
@@ -18,10 +20,11 @@
   <tbody>
     {{#each users}}
     <tr>
-      <td>{{add @index 1}}</td> <!-- Using the add helper -->
+      <td>{{add @index 1}}</td>
+      <td>{{this.name}}</td>
       <td>{{this.email}}</td>
       <td>
-        <a href="/admin/editUser/{{this._id}}" class="btn edit">Edit</a>
+        <a href="/admin/editUser/{{this._id}}" class="btn edit">Edit </a>
         <a href="/admin/deleteUser/{{this._id}}" class="btn delete" onclick="return showDeleteAlert(event, '{{this._id}}')">Delete</a>
       </td>
     </tr>
@@ -29,28 +32,61 @@
   </tbody>
 </table>
 
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    function showDeleteAlert(event, userId) {
-        // Prevent the default action (form submission or link navigation)
-        event.preventDefault();
 
-        // Show SweetAlert
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'This action cannot be undone!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // If confirmed, proceed with the deletion by redirecting
-                window.location.href = '/admin/deleteUser/' + userId;
-            }
-        });
+async function searchUsers() {
+    const searchQuery = document.getElementById('searchInput').value.trim();
 
-        return false; // Prevent the default action until after SweetAlert confirmation
+    if (!searchQuery) {
+        return;
     }
+
+    try {
+        const response = await fetch(`/admin/searchUsers?query=${encodeURIComponent(searchQuery)}`);
+        const users = await response.json();
+
+        const usersTable = document.getElementById('usersTable').querySelector('tbody');
+        usersTable.innerHTML = ''; 
+
+        if (users.length === 0) {
+            usersTable.innerHTML = '<tr><td colspan="4">No users found.</td></tr>';
+        } else {
+            users.forEach((user, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        <a href="/admin/editUser/${user._id}" class="btn edit">Edit</a>
+                        <a href="/admin/deleteUser/${user._id}" class="btn delete" onclick="return showDeleteAlert(event, '${user._id}')">Delete</a>
+                    </td>
+                `;
+                usersTable.appendChild(row);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching search results:', error);
+    }
+}
+
+function showDeleteAlert(event, userId) {
+    event.preventDefault();
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'This action cannot be undone!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/admin/deleteUser/' + userId;
+        }
+    });
+    return false;
+}
 </script>

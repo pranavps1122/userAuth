@@ -22,12 +22,13 @@ const login = async (req, res) => {
 
         
         req.session.admin = {
-            id: admin._id,
-            email: admin.email,
-            loginTime: new Date()
+            email: admin.email
         };
+    
+        
         
         res.redirect('/admin/dashboard');
+
     } catch (error) {
         console.error("Error during login:", error.message);
         res.status(500).send("Internal Server Error");
@@ -41,12 +42,15 @@ const loadDashboard = async (req, res) => {
             return res.redirect('/admin/login');  
         }
 
+        
+
         const search = req.query.search || '';
         const query = search
-            ? { $or: [{ name: { $regex: search, $options: 'i' } }, { email: { $regex: search, $options: 'i' } }] }
+            ? { $or: [{ name: { $regex: search, $options: 'i' } }] }
             : {};
 
         const users = await userModel.find(query);  
+      
         res.render('admin/dashboard', { users, search }); 
 
       
@@ -64,25 +68,29 @@ const loadAddUser = (req, res) => {
 
 const addUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password,name } = req.body;
 
     
         const existingUser = await userModel.findOne({ email });
 
         if (existingUser) {
-         
-            return res.status(400).json({ success: false, message: 'User already exists' });
+            
+         return res.json({ success: false, message: 'User already exists' });
         }
 
         
         const hashedPassword = await bcrypt.hash(password, 10);
-        await userModel.create({ email, password: hashedPassword });
+        await userModel.create({ email, password: hashedPassword ,name:name});
 
-      
-        return res.status(200).json({ success: true, message: 'User created successfully' });
+        console.log(
+            `username:${name}
+            email:${email} 
+            Password ${hashedPassword}`);
+        
+        return res.json({ success: true, message: 'User created successfully' });
     } catch (error) {
         console.error('Error adding user:', error.message);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
+        res.json({ success: false, message: 'Internal Server Error' });
     }
 };
 
@@ -95,44 +103,50 @@ const loadEditUser = async (req, res) => {
         res.render('admin/editUser', { user });  
     } catch (error) {
         console.error("Error loading edit user page:", error.message);
-        res.status(500).send("");
+       
       
     }
 };
 
 const updateUser = async (req, res) => {
     try {
-        const { email } = req.body;
+        const { email ,name } = req.body;
         const userId = req.params.id;
 
        
         const existingUser = await userModel.findOne({ email, _id: { $ne: userId } });
+
         
         if (existingUser) {
          
             return res.status(400).json({ success: false, message: "User already exists" });
         }
 
-        await userModel.findByIdAndUpdate(userId, { email });
+        await userModel.findByIdAndUpdate(userId, { email ,name});
         
         res.status(200).json({ success: true, message: "User updated successfully" });
     } catch (error) {
         console.error("Error updating user:", error.message);
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+        
     }
 };
 
 
 
 const deleteUser = async (req, res) => {
+
     try {
-        await userModel.findByIdAndDelete(req.params.id);  
+        const userId=req.params.id
+        await userModel.findByIdAndDelete(userId);  
+        if(req.session&&req.session.user&&req.session.user._id===userId)
+            req.session.destroy()
         res.redirect('/admin/dashboard');  
     } catch (error) {
         console.error("Error deleting user:", error.message);
-        res.status(500).send("Internal Server Error");
+ 
     }
 };
+
 
 
 const logout = async (req, res) => {
@@ -144,6 +158,30 @@ const logout = async (req, res) => {
     });
 };
 
+const searchUser = async (req, res) => {
+    try {
+        const searchQuery = req.query.query.trim();
+        if (!searchQuery) {
+            return res.json([]); 
+        }
+
+        
+        const users = await userModel.find({
+            $or: [
+                { name: { $regex: searchQuery, $options: 'i' } },
+                { email: { $regex: searchQuery, $options: 'i' } }
+            ]
+        }).exec();
+
+      
+        res.json(users);
+    } catch (error) {
+        console.error('Error searching users:', error);
+        res.status(500).send('Error searching users');
+    }
+};
+
+
 
 module.exports = {
     loadLogin,
@@ -154,5 +192,8 @@ module.exports = {
     loadEditUser,
     updateUser,
     deleteUser,
-    logout
+    logout,
+    searchUser,
+ 
+    
 };

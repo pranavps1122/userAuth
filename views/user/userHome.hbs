@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome - User Home</title>
-    <link rel="stylesheet" href="/styles/Userlogin.css"> <!-- Link your CSS file for styling -->
+    <link rel="stylesheet" href="/styles/Userlogin.css"> 
 </head>
 <body>
     <div class="welcome-container">
-        <h1>Welcome, {{username}}!</h1> <!-- Dynamic user name rendering -->
+        <h1>Welcome </h1>
+        <p class="user">{{detials}}</p>
+
         <p>You are logged in successfully.</p>
         <div class="action-buttons">
            
@@ -16,16 +18,5 @@
         </div>
     </div>
 
-    <script>
-        const message = "{{message}}"; // If there is any message passed from the backend
-        if (message) {
-            swal({
-                title: "Message",
-                text: message,
-                icon: "info",
-                button: "OK"
-            });
-        }
-    </script>
 </body>
 </html>

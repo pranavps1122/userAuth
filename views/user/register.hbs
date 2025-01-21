@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-   
     <link rel="stylesheet" href="/styles/Userlogin.css">
 </head>
 <body>
@@ -12,16 +11,20 @@
         <h1 class="title">REGISTER</h1>
         <form class="form" method="post" action="/user/register">
             <div class="input-group">
+                <label for="name">Username</label>
+                <input id="name" type="text" name="name">
+            </div>
+            <div class="input-group">
                 <label for="email">Email</label>
-                <input id="email" type="email" name="email" >
+                <input id="email" type="text" name="email">
             </div>
             <div class="input-group">
                 <label for="password">Password</label>
-                <input id="password" type="password" name="password" >
+                <input id="password" type="password" name="password">
             </div>
             <div class="input-group">
                 <label for="confirmPassword">Confirm Password</label>
-                <input id="confirmPassword" type="password" name="confirmPassword" >
+                <input id="confirmPassword" type="password" name="confirmPassword">
             </div>
             <p class="sign-up">Already Have An Account?
                 <a href="/user/login">Login</a>
@@ -29,47 +32,44 @@
             <button type="submit" class="sign-in">Sign Up</button>
         </form>
     </div>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
-        
-        const message = "{{message}}"; 
-        if (message) {
-            swal({
-                title: "Message",
-                text: message,
-                icon: "info",
-                button: "OK"
-            });
-        }
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const emailInput = document.getElementById('email').value; 
+            const trimmedEmail = emailInput.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const name = document.getElementById('name').value;
 
-  document.querySelector('form').addEventListener('submit', function (e) {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!emailInput || !password || !confirmPassword || !name) {
+                swal("All fields are required!", "", "warning");
+                e.preventDefault();
+                return;
+            }
 
-   
-    if (email === '' || password === '' || confirmPassword === '') {
-        swal("All fields are required!", "", "warning");
-        e.preventDefault(); 
-        return;
-    }
+            if (/\s/.test(emailInput)) {
+                swal("Email cannot  spaces!", "", "error");
+                e.preventDefault();
+                return;
+            }
 
-   
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailPattern.test(email)) {
-        swal("Please enter a valid email address!", "", "error");
-        e.preventDefault(); 
-        return;
-    }
+            // Validate email pattern
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailPattern.test(trimmedEmail)) {
+                swal("Please enter a valid email address!", "", "error");
+                e.preventDefault();
+                return;
+            }
 
-
-    if (password !== confirmPassword) {
-        swal("Passwords do not match!", "", "error");
-        e.preventDefault(); 
-        return;
-    }
-});
-
+            // Password match check
+            if (password !== confirmPassword) {
+                swal("Passwords do not match!", "", "error");
+                e.preventDefault();
+                return;
+            }
+        });
     </script>
 </body>
 </html>

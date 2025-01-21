@@ -1,7 +1,8 @@
 const express=require('express')
 const router=express.Router();
 const userController=require('../controller/userController')
-const auth=require('../middleware/auth')
+const auth=require('../middleware/auth');
+const { checkUserSession } = require('../controller/adminController');
 
 
 
@@ -13,6 +14,7 @@ router.post('/user/login', userController.login);
 router.get('/user/logout', userController.logout); 
 router.get('/home',auth.checkSession,userController.loadHome)
 router.get('/logout',userController.logout)
+
 
 
 

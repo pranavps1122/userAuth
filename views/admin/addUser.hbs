@@ -2,6 +2,11 @@
 <div class="new-add-user-container">
     <h2 class="new-title">Add User</h2>
     <form id="addUserForm">
+        
+          <label for="name" class="new-label">Username:</label>
+        <input type="name" id="name" name="name" class="new-input" required />
+
+
         <label for="email" class="new-label">Email:</label>
         <input type="email" id="email" name="email" class="new-input" required />
 
@@ -9,8 +14,10 @@
         <input type="password" id="password" name="password" class="new-input" required />
 
         <button type="button" class="new-btn" onclick="showAlert()">Create User</button>
+        
     </form>
 </div>
+
 
 
 <!-- SweetAlert2 CDN -->
@@ -20,13 +27,16 @@
     async function showAlert() {
         const form = document.getElementById('addUserForm');
         const formData = new FormData(form);
+        
 
         try {
             const response = await fetch('/admin/addUser', {
                 method: 'POST',
                 body: JSON.stringify({
                     email: formData.get('email'),
-                    password: formData.get('password')
+                    password: formData.get('password'),
+                    name:formData.get('name')
+                    
                 }),
                 headers: { 'Content-Type': 'application/json' }
             });
